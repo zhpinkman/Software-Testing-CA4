@@ -1,5 +1,7 @@
 package org.springframework.samples.petclinic.utility;
 
+import com.github.mryf323.tractatus.ClauseCoverage;
+import com.github.mryf323.tractatus.Valuation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -37,6 +39,15 @@ class TriTypeTest {
 
 //	CC Tests (Clause Coverage)
 
+
+	@ClauseCoverage(
+		predicate = "a || b || c",
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false),
+		}
+	)
 	@Test
 	public void recognizeTriangleByCodeTestCC1() {
 		TriType triType = new TriType();
@@ -45,6 +56,14 @@ class TriTypeTest {
 		Assertions.assertEquals(triClass, TriType.TryClass.EQUILATERAL);
 	}
 
+	@ClauseCoverage(
+		predicate = "a || b || c",
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = true),
+			@Valuation(clause = 'c', valuation = true),
+		}
+	)
 	@Test
 	public void recognizeTriangleByCodeTestCC2() {
 		TriType triType = new TriType();
@@ -53,6 +72,30 @@ class TriTypeTest {
 		Assertions.assertEquals(triClass, TriType.TryClass.NOT_VALID);
 	}
 
+	@ClauseCoverage(
+		predicate = "a || b || c",
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false),
+		}
+	)
+	@ClauseCoverage(
+		predicate = "a || b || c",
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = true),
+			@Valuation(clause = 'c', valuation = false),
+		}
+	)
+	@ClauseCoverage(
+		predicate = "a || b || c",
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = true),
+		}
+	)
 	@Test
 	public void recognizeTriangleByCodeTestCC3() {
 		TriType triType = new TriType();
@@ -62,6 +105,34 @@ class TriTypeTest {
 		Assertions.assertEquals(triType.classifyTriangle(3, 2, 1), TriType.TryClass.NOT_VALID);
 	}
 
+	@ClauseCoverage(
+		predicate = "a && b",
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = false)
+		}
+	)
+	@ClauseCoverage(
+		predicate = "a && b",
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = true)
+		}
+	)
+	@ClauseCoverage(
+		predicate = "a && b",
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false)
+		}
+	)
+	@ClauseCoverage(
+		predicate = "a && b",
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = true)
+		}
+	)
 	@Test
 	public void recognizeTriangleByCodeTestCC4() {
 		TriType triType = new TriType();
