@@ -35,7 +35,13 @@ class TriTypeTest {
 	 */
 	private static boolean questionTwo(boolean a, boolean b, boolean c, boolean d, boolean e) {
 		boolean predicate = false;
-//		predicate = a predicate with any number of clauses
+		predicate = (a && b) || (c && d);
+//		we will write down the CUTPNFP and also UTPC TRs for them and you can see that the former does not subsumes the latter one.
+//		CUTPNFP
+//		TTFF, FTFF, TFFF, FFTT, FFTF, FFFT
+//		now it would be adequate to just find a combination that is not included in the CUTPNFP TRs
+//		FTFT would appear in the !a!c implicant in the fBar predicate that must be covered by the UTPC but this combination is not in the CUTPNFP TRs
+//		So we can conclude that the CUTPNFP does not subsume UTPC
 		return predicate;
 	}
 
