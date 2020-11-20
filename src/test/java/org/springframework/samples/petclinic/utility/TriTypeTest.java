@@ -281,4 +281,57 @@ class TriTypeTest {
 		Assertions.assertEquals(triType.classifyTriangle(4, 3, 5), TriType.TryClass.SCALENE);
 	}
 
+	@CACC(
+		predicate = "a && b",
+		majorClause = 'a',
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = true)
+		},
+		predicateValue = true
+	)
+	@CACC(
+		predicate = "a && b",
+		majorClause = 'a',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = true)
+		},
+		predicateValue = false
+	)
+	@CACC(
+		predicate = "a && b",
+		majorClause = 'b',
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = true)
+		},
+		predicateValue = true
+	)
+	@CACC(
+		predicate = "a && b",
+		majorClause = 'b',
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = false)
+		},
+		predicateValue = false
+	)
+	@Test
+	public void recognizeTriangleByCodeTestCACC3() {
+		TriType triType = new TriType();
+		Assertions.assertEquals(triType.classifyTriangle(2, 2, 1), TriType.TryClass.ISO_SCALENE);
+		Assertions.assertEquals(triType.classifyTriangle(2, 1, 2), TriType.TryClass.ISO_SCALENE);
+		Assertions.assertEquals(triType.classifyTriangle(2, 2, 5), TriType.TryClass.NOT_VALID);
+
+		Assertions.assertEquals(triType.classifyTriangle(2, 1, 2), TriType.TryClass.ISO_SCALENE);
+		Assertions.assertEquals(triType.classifyTriangle(1, 2, 2), TriType.TryClass.ISO_SCALENE);
+		Assertions.assertEquals(triType.classifyTriangle(2, 5, 2), TriType.TryClass.NOT_VALID);
+
+		Assertions.assertEquals(triType.classifyTriangle(1, 2, 2), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(1, 2, 2), TriType.TryClass.ISO_SCALENE);
+//		not feasible for the last one because we cannot reach here without triOut == 3 which is supposed to be false
+		Assertions.assertEquals(triType.classifyTriangle(5, 2, 2), TriType.TryClass.NOT_VALID);
+	}
+
 }
