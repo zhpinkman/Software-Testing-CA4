@@ -143,26 +143,142 @@ class TriTypeTest {
 
 //	CACC tests (Correlated Active Clause Coverage)
 
-//	@CACC(
-//		predicate = "a || b || c",
-//		majorClause = 'a',
-//		valuations = {
-//			@Valuation(clause = 'a', valuation = true),
-//			@Valuation(clause = 'b', valuation = false),
-//			@Valuation(clause = 'c', valuation = false)
-//		},
-//		predicateValue = true
-//	)
-//	@Test
-//	public void recognizeTriangleByCodeTestCACC1() {
-//		TriType triType = new TriType();
-//		TriType.TryClass triClass;
-//		Assertions.assertEquals(triType.classifyTriangle(2, 2, 3), TriType.TryClass.ISO_SCALENE);
-//		Assertions.assertEquals(triType.classifyTriangle(3, 2, 2), TriType.TryClass.ISO_SCALENE);
-//		Assertions.assertEquals(triType.classifyTriangle(2, 3, 2), TriType.TryClass.ISO_SCALENE);
-//		Assertions.assertEquals(triType.classifyTriangle(2, 2, 4), TriType.TryClass.NOT_VALID);
-//		Assertions.assertEquals(triType.classifyTriangle(4, 2, 2), TriType.TryClass.NOT_VALID);
-//		Assertions.assertEquals(triType.classifyTriangle(2, 4, 2), TriType.TryClass.NOT_VALID);
-//	}
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'a',
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = true
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'a',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = false
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'b',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = true),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = true
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'b',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = false
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'c',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = true)
+		},
+		predicateValue = true
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'c',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = false
+	)
+	@Test
+	public void recognizeTriangleByCodeTestCACC1() {
+		TriType triType = new TriType();
+		Assertions.assertEquals(triType.classifyTriangle(-1, 1, 1), TriType.TryClass.NOT_VALID);
+		Assertions.assertEquals(triType.classifyTriangle(1, -1, 1), TriType.TryClass.NOT_VALID);
+		Assertions.assertEquals(triType.classifyTriangle(1, 1, -1), TriType.TryClass.NOT_VALID);
+		Assertions.assertEquals(triType.classifyTriangle(1, 1, 1), TriType.TryClass.EQUILATERAL);
+	}
+
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'a',
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = true
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'a',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = false
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'b',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = true),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = true
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'b',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = false
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'c',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = true)
+		},
+		predicateValue = true
+	)
+	@CACC(
+		predicate = "a || b || c",
+		majorClause = 'c',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		},
+		predicateValue = false
+	)
+	@Test
+	public void recognizeTriangleByCodeTestCACC2() {
+		TriType triType = new TriType();
+		Assertions.assertEquals(triType.classifyTriangle(1, 1, 3), TriType.TryClass.NOT_VALID);
+		Assertions.assertEquals(triType.classifyTriangle(3, 1, 1), TriType.TryClass.NOT_VALID);
+		Assertions.assertEquals(triType.classifyTriangle(1, 3, 1), TriType.TryClass.NOT_VALID);
+		Assertions.assertEquals(triType.classifyTriangle(4, 3, 5), TriType.TryClass.SCALENE);
+	}
 
 }
