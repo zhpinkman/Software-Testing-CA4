@@ -1,6 +1,8 @@
 package org.springframework.samples.petclinic.utility;
 
+import com.github.mryf323.tractatus.CACC;
 import com.github.mryf323.tractatus.ClauseCoverage;
+import com.github.mryf323.tractatus.NearFalsePoint;
 import com.github.mryf323.tractatus.Valuation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -51,9 +53,7 @@ class TriTypeTest {
 	@Test
 	public void recognizeTriangleByCodeTestCC1() {
 		TriType triType = new TriType();
-		TriType.TryClass triClass;
-		triClass = triType.classifyTriangle(1, 1, 1);
-		Assertions.assertEquals(triClass, TriType.TryClass.EQUILATERAL);
+		Assertions.assertEquals(triType.classifyTriangle(1, 1, 1), TriType.TryClass.EQUILATERAL);
 	}
 
 	@ClauseCoverage(
@@ -67,9 +67,7 @@ class TriTypeTest {
 	@Test
 	public void recognizeTriangleByCodeTestCC2() {
 		TriType triType = new TriType();
-		TriType.TryClass triClass;
-		triClass = triType.classifyTriangle(-1, -1, -1);
-		Assertions.assertEquals(triClass, TriType.TryClass.NOT_VALID);
+		Assertions.assertEquals(triType.classifyTriangle(-1, -1, -1), TriType.TryClass.NOT_VALID);
 	}
 
 	@ClauseCoverage(
@@ -99,7 +97,6 @@ class TriTypeTest {
 	@Test
 	public void recognizeTriangleByCodeTestCC3() {
 		TriType triType = new TriType();
-		TriType.TryClass triClass;
 		Assertions.assertEquals(triType.classifyTriangle(1, 2, 3), TriType.TryClass.NOT_VALID);
 		Assertions.assertEquals(triType.classifyTriangle(2, 3, 1), TriType.TryClass.NOT_VALID);
 		Assertions.assertEquals(triType.classifyTriangle(3, 2, 1), TriType.TryClass.NOT_VALID);
@@ -136,7 +133,6 @@ class TriTypeTest {
 	@Test
 	public void recognizeTriangleByCodeTestCC4() {
 		TriType triType = new TriType();
-		TriType.TryClass triClass;
 		Assertions.assertEquals(triType.classifyTriangle(2, 2, 3), TriType.TryClass.ISO_SCALENE);
 		Assertions.assertEquals(triType.classifyTriangle(3, 2, 2), TriType.TryClass.ISO_SCALENE);
 		Assertions.assertEquals(triType.classifyTriangle(2, 3, 2), TriType.TryClass.ISO_SCALENE);
@@ -144,5 +140,29 @@ class TriTypeTest {
 		Assertions.assertEquals(triType.classifyTriangle(4, 2, 2), TriType.TryClass.NOT_VALID);
 		Assertions.assertEquals(triType.classifyTriangle(2, 4, 2), TriType.TryClass.NOT_VALID);
 	}
+
+//	CACC tests (Correlated Active Clause Coverage)
+
+//	@CACC(
+//		predicate = "a || b || c",
+//		majorClause = 'a',
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = true),
+//			@Valuation(clause = 'b', valuation = false),
+//			@Valuation(clause = 'c', valuation = false)
+//		},
+//		predicateValue = true
+//	)
+//	@Test
+//	public void recognizeTriangleByCodeTestCACC1() {
+//		TriType triType = new TriType();
+//		TriType.TryClass triClass;
+//		Assertions.assertEquals(triType.classifyTriangle(2, 2, 3), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(3, 2, 2), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(2, 3, 2), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(2, 2, 4), TriType.TryClass.NOT_VALID);
+//		Assertions.assertEquals(triType.classifyTriangle(4, 2, 2), TriType.TryClass.NOT_VALID);
+//		Assertions.assertEquals(triType.classifyTriangle(2, 4, 2), TriType.TryClass.NOT_VALID);
+//	}
 
 }
