@@ -11,7 +11,9 @@ import org.slf4j.LoggerFactory;
 
 @ExtendWith(ReportingExtension.class)
 class TriTypeTest {
+
 	private static final Logger log = LoggerFactory.getLogger(TriTypeTest.class);
+
 	@Test
 	public void sampleTest() {
 		TriType tryType = new TriType();
