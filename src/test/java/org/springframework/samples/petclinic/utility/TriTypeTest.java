@@ -1,18 +1,17 @@
 package org.springframework.samples.petclinic.utility;
 
-import com.github.mryf323.tractatus.CACC;
-import com.github.mryf323.tractatus.ClauseCoverage;
-import com.github.mryf323.tractatus.NearFalsePoint;
-import com.github.mryf323.tractatus.Valuation;
+import com.github.mryf323.tractatus.*;
+import com.github.mryf323.tractatus.experimental.extensions.ReportingExtension;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+@ExtendWith(ReportingExtension.class)
 class TriTypeTest {
-
 	private static final Logger log = LoggerFactory.getLogger(TriTypeTest.class);
-
 	@Test
 	public void sampleTest() {
 		TriType tryType = new TriType();
@@ -48,8 +47,20 @@ class TriTypeTest {
 //	CC Tests (Clause Coverage)
 
 
+	@ClauseDefinition(
+		clause = 'a',
+		def = "Side1 <= 0"
+	)
+	@ClauseDefinition(
+		clause = 'b',
+		def = "Side2 <= 0"
+	)
+	@ClauseDefinition(
+		clause = 'c',
+		def = "Side3 <= 0"
+	)
 	@ClauseCoverage(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
 			@Valuation(clause = 'b', valuation = false),
@@ -62,8 +73,20 @@ class TriTypeTest {
 		Assertions.assertEquals(triType.classifyTriangle(1, 1, 1), TriType.TryClass.EQUILATERAL);
 	}
 
+	@ClauseDefinition(
+		clause = 'a',
+		def = "Side1 <= 0"
+	)
+	@ClauseDefinition(
+		clause = 'b',
+		def = "Side2 <= 0"
+	)
+	@ClauseDefinition(
+		clause = 'c',
+		def = "Side3 <= 0"
+	)
 	@ClauseCoverage(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		valuations = {
 			@Valuation(clause = 'a', valuation = true),
 			@Valuation(clause = 'b', valuation = true),
@@ -76,8 +99,21 @@ class TriTypeTest {
 		Assertions.assertEquals(triType.classifyTriangle(-1, -1, -1), TriType.TryClass.NOT_VALID);
 	}
 
+
+	@ClauseDefinition(
+		clause = 'a',
+		def = "Side1+Side2 <= Side3"
+	)
+	@ClauseDefinition(
+		clause = 'b',
+		def = "Side2+Side3 <= Side1"
+	)
+	@ClauseDefinition(
+		clause = 'c',
+		def = "Side1+Side3 <= Side2"
+	)
 	@ClauseCoverage(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		valuations = {
 			@Valuation(clause = 'a', valuation = true),
 			@Valuation(clause = 'b', valuation = false),
@@ -85,7 +121,7 @@ class TriTypeTest {
 		}
 	)
 	@ClauseCoverage(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
 			@Valuation(clause = 'b', valuation = true),
@@ -93,7 +129,7 @@ class TriTypeTest {
 		}
 	)
 	@ClauseCoverage(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
 			@Valuation(clause = 'b', valuation = false),
@@ -108,49 +144,126 @@ class TriTypeTest {
 		Assertions.assertEquals(triType.classifyTriangle(3, 2, 1), TriType.TryClass.NOT_VALID);
 	}
 
-	@ClauseCoverage(
-		predicate = "a && b",
+////	redundant
+//	@ClauseCoverage(
+//		predicate = "a && b",
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = true),
+//			@Valuation(clause = 'b', valuation = false)
+//		}
+//	)
+//	@ClauseCoverage(
+//		predicate = "a && b",
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = true),
+//			@Valuation(clause = 'b', valuation = true)
+//		}
+//	)
+//	@ClauseCoverage(
+//		predicate = "a && b",
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = false),
+//			@Valuation(clause = 'b', valuation = false)
+//		}
+//	)
+//	@ClauseCoverage(
+//		predicate = "a && b",
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = false),
+//			@Valuation(clause = 'b', valuation = true)
+//		}
+//	)
+//	@Test
+//	public void recognizeTriangleByCodeTestCC4() {
+//		TriType triType = new TriType();
+//		Assertions.assertEquals(triType.classifyTriangle(2, 2, 3), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(3, 2, 2), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(2, 3, 2), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(2, 2, 4), TriType.TryClass.NOT_VALID);
+//		Assertions.assertEquals(triType.classifyTriangle(4, 2, 2), TriType.TryClass.NOT_VALID);
+//		Assertions.assertEquals(triType.classifyTriangle(2, 4, 2), TriType.TryClass.NOT_VALID);
+//	}
+
+//	CACC tests (Correlated Active Clause Coverage),
+//		CUTPNFP (Corresponding Unique Points - Near False Point Coverage)
+
+	@ClauseDefinition(
+		clause = 'a',
+		def = "Side1 <= 0"
+	)
+	@ClauseDefinition(
+		clause = 'b',
+		def = "Side2 <= 0"
+	)
+	@ClauseDefinition(
+		clause = 'c',
+		def = "Side3 <= 0"
+	)
+	@UniqueTruePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "a",
 		valuations = {
 			@Valuation(clause = 'a', valuation = true),
-			@Valuation(clause = 'b', valuation = false)
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
 		}
 	)
-	@ClauseCoverage(
-		predicate = "a && b",
-		valuations = {
-			@Valuation(clause = 'a', valuation = true),
-			@Valuation(clause = 'b', valuation = true)
-		}
-	)
-	@ClauseCoverage(
-		predicate = "a && b",
+	@NearFalsePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "a",
+		clause = 'a',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
-			@Valuation(clause = 'b', valuation = false)
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
 		}
 	)
-	@ClauseCoverage(
-		predicate = "a && b",
+	@UniqueTruePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "b",
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
-			@Valuation(clause = 'b', valuation = true)
+			@Valuation(clause = 'b', valuation = true),
+			@Valuation(clause = 'c', valuation = false)
 		}
 	)
-	@Test
-	public void recognizeTriangleByCodeTestCC4() {
-		TriType triType = new TriType();
-		Assertions.assertEquals(triType.classifyTriangle(2, 2, 3), TriType.TryClass.ISO_SCALENE);
-		Assertions.assertEquals(triType.classifyTriangle(3, 2, 2), TriType.TryClass.ISO_SCALENE);
-		Assertions.assertEquals(triType.classifyTriangle(2, 3, 2), TriType.TryClass.ISO_SCALENE);
-		Assertions.assertEquals(triType.classifyTriangle(2, 2, 4), TriType.TryClass.NOT_VALID);
-		Assertions.assertEquals(triType.classifyTriangle(4, 2, 2), TriType.TryClass.NOT_VALID);
-		Assertions.assertEquals(triType.classifyTriangle(2, 4, 2), TriType.TryClass.NOT_VALID);
-	}
-
-//	CACC tests (Correlated Active Clause Coverage)
-
+	@NearFalsePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "b",
+		clause = 'b',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		}
+	)
+	@UniqueTruePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "c",
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = true)
+		}
+	)
+	@NearFalsePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "c",
+		clause = 'c',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		}
+	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'a',
 		valuations = {
 			@Valuation(clause = 'a', valuation = true),
@@ -160,7 +273,7 @@ class TriTypeTest {
 		predicateValue = true
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'a',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -170,7 +283,7 @@ class TriTypeTest {
 		predicateValue = false
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'b',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -180,7 +293,7 @@ class TriTypeTest {
 		predicateValue = true
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'b',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -190,7 +303,7 @@ class TriTypeTest {
 		predicateValue = false
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'c',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -200,7 +313,7 @@ class TriTypeTest {
 		predicateValue = true
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'c',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -218,8 +331,83 @@ class TriTypeTest {
 		Assertions.assertEquals(triType.classifyTriangle(1, 1, 1), TriType.TryClass.EQUILATERAL);
 	}
 
+	@ClauseDefinition(
+		clause = 'a',
+		def = "Side1+Side2 <= Side3"
+	)
+	@ClauseDefinition(
+		clause = 'b',
+		def = "Side2+Side3 <= Side1"
+	)
+	@ClauseDefinition(
+		clause = 'c',
+		def = "Side1+Side3 <= Side2"
+	)
+	@UniqueTruePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "a",
+		valuations = {
+			@Valuation(clause = 'a', valuation = true),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		}
+	)
+	@NearFalsePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "a",
+		clause = 'a',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		}
+	)
+	@UniqueTruePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "b",
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = true),
+			@Valuation(clause = 'c', valuation = false)
+		}
+	)
+	@NearFalsePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "b",
+		clause = 'b',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		}
+	)
+	@UniqueTruePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "c",
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = true)
+		}
+	)
+	@NearFalsePoint(
+		predicate = "a + b + c",
+		dnf = "a + b + c",
+		implicant = "c",
+		clause = 'c',
+		valuations = {
+			@Valuation(clause = 'a', valuation = false),
+			@Valuation(clause = 'b', valuation = false),
+			@Valuation(clause = 'c', valuation = false)
+		}
+	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'a',
 		valuations = {
 			@Valuation(clause = 'a', valuation = true),
@@ -229,7 +417,7 @@ class TriTypeTest {
 		predicateValue = true
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'a',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -239,7 +427,7 @@ class TriTypeTest {
 		predicateValue = false
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'b',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -249,7 +437,7 @@ class TriTypeTest {
 		predicateValue = true
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'b',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -259,7 +447,7 @@ class TriTypeTest {
 		predicateValue = false
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'c',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -269,7 +457,7 @@ class TriTypeTest {
 		predicateValue = true
 	)
 	@CACC(
-		predicate = "a || b || c",
+		predicate = "a + b + c",
 		majorClause = 'c',
 		valuations = {
 			@Valuation(clause = 'a', valuation = false),
@@ -287,57 +475,58 @@ class TriTypeTest {
 		Assertions.assertEquals(triType.classifyTriangle(4, 3, 5), TriType.TryClass.SCALENE);
 	}
 
-	@CACC(
-		predicate = "a && b",
-		majorClause = 'a',
-		valuations = {
-			@Valuation(clause = 'a', valuation = true),
-			@Valuation(clause = 'b', valuation = true)
-		},
-		predicateValue = true
-	)
-	@CACC(
-		predicate = "a && b",
-		majorClause = 'a',
-		valuations = {
-			@Valuation(clause = 'a', valuation = false),
-			@Valuation(clause = 'b', valuation = true)
-		},
-		predicateValue = false
-	)
-	@CACC(
-		predicate = "a && b",
-		majorClause = 'b',
-		valuations = {
-			@Valuation(clause = 'a', valuation = true),
-			@Valuation(clause = 'b', valuation = true)
-		},
-		predicateValue = true
-	)
-	@CACC(
-		predicate = "a && b",
-		majorClause = 'b',
-		valuations = {
-			@Valuation(clause = 'a', valuation = true),
-			@Valuation(clause = 'b', valuation = false)
-		},
-		predicateValue = false
-	)
-	@Test
-	public void recognizeTriangleByCodeTestCACC3() {
-		TriType triType = new TriType();
-		Assertions.assertEquals(triType.classifyTriangle(2, 2, 1), TriType.TryClass.ISO_SCALENE);
-		Assertions.assertEquals(triType.classifyTriangle(2, 1, 2), TriType.TryClass.ISO_SCALENE);
-		Assertions.assertEquals(triType.classifyTriangle(2, 2, 5), TriType.TryClass.NOT_VALID);
-
-		Assertions.assertEquals(triType.classifyTriangle(2, 1, 2), TriType.TryClass.ISO_SCALENE);
-		Assertions.assertEquals(triType.classifyTriangle(1, 2, 2), TriType.TryClass.ISO_SCALENE);
-		Assertions.assertEquals(triType.classifyTriangle(2, 5, 2), TriType.TryClass.NOT_VALID);
-
-		Assertions.assertEquals(triType.classifyTriangle(1, 2, 2), TriType.TryClass.ISO_SCALENE);
+////	redundant
+//	@CACC(
+//		predicate = "a && b",
+//		majorClause = 'a',
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = true),
+//			@Valuation(clause = 'b', valuation = true)
+//		},
+//		predicateValue = true
+//	)
+//	@CACC(
+//		predicate = "a && b",
+//		majorClause = 'a',
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = false),
+//			@Valuation(clause = 'b', valuation = true)
+//		},
+//		predicateValue = false
+//	)
+//	@CACC(
+//		predicate = "a && b",
+//		majorClause = 'b',
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = true),
+//			@Valuation(clause = 'b', valuation = true)
+//		},
+//		predicateValue = true
+//	)
+//	@CACC(
+//		predicate = "a && b",
+//		majorClause = 'b',
+//		valuations = {
+//			@Valuation(clause = 'a', valuation = true),
+//			@Valuation(clause = 'b', valuation = false)
+//		},
+//		predicateValue = false
+//	)
+//	@Test
+//	public void recognizeTriangleByCodeTestCACC3() {
+//		TriType triType = new TriType();
+//		Assertions.assertEquals(triType.classifyTriangle(2, 2, 1), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(2, 1, 2), TriType.TryClass.ISO_SCALENE);
+//		Assertions.assertEquals(triType.classifyTriangle(2, 2, 5), TriType.TryClass.NOT_VALID);
+//
+//		Assertions.assertEquals(triType.classifyTriangle(2, 1, 2), TriType.TryClass.ISO_SCALENE);
 //		Assertions.assertEquals(triType.classifyTriangle(1, 2, 2), TriType.TryClass.ISO_SCALENE);
-//		not feasible for the last one because we cannot reach here without triOut == 3 which is supposed to be false
-		Assertions.assertEquals(triType.classifyTriangle(5, 2, 2), TriType.TryClass.NOT_VALID);
-	}
+//		Assertions.assertEquals(triType.classifyTriangle(2, 5, 2), TriType.TryClass.NOT_VALID);
+//
+//		Assertions.assertEquals(triType.classifyTriangle(1, 2, 2), TriType.TryClass.ISO_SCALENE);
+////		Assertions.assertEquals(triType.classifyTriangle(1, 2, 2), TriType.TryClass.ISO_SCALENE);
+////		not feasible for the last one because we cannot reach here without triOut == 3 which is supposed to be false
+//		Assertions.assertEquals(triType.classifyTriangle(5, 2, 2), TriType.TryClass.NOT_VALID);
+//	}
 
 }
